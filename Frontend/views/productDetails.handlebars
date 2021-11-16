@@ -1,20 +1,62 @@
+<script>
+    // Show single product
+    function showProductById() {
+        let inStock;
+        let productImg;
+        let productDetails;
+        productImg = document.getElementById('productImg');
+        productDetails = document.getElementById('productDetails');
+
+        fetch('http://localhost:5000/products/' + {{ id }})
+        .then(response => response.json())
+        .then(json => {
+            let productImgStr = ` <img src="${json.imageFile}" width="100%" height="100%">`;
+            let productDetailsStr = `<h1>${json.name}</h1>
+                                    <h4>${json.price} DKK</h4>
+                                    <select id="quantity"></select>
+                                    <a href="/" class="addToCartBtnProductDetails"><img src="http://localhost:3000/images/cart.png">Tilføj</a>
+                                    <h3>Beskrivelse</h3>
+                                    <p>${json.description}</p>`
+
+            inStock = json.inStock;
+
+            productImg.innerHTML = productImgStr;
+            productDetails.innerHTML = productDetailsStr;
+        })
+        .then(function () {
+            let str = '';
+            for (let i = 0; i <= inStock; i++) {
+                str += `<option value="${i}">${i}</option>`;
+            }
+
+            let quantity = document.getElementById('quantity');
+            quantity.innerHTML = str;
+        }).then(function () {
+            addEventOnAddBtn();
+        });
+    }
+
+    function addEventOnAddBtn() {
+        let addToCartBtnProductDetails = document.getElementsByClassName("addToCartBtnProductDetails");
+
+        addToCartBtnProductDetails[0].addEventListener("click", e => {
+            e.preventDefault();
+            console.log('test');
+        });
+    }
+
+
+    window.addEventListener('DOMContentLoaded', e => {
+        showProductById();
+    });
+
+</script>
+
 <div class="small-container">
     <div class="row">
-        <div class="col-3">
-            <img src="https://dummyimage.com/200x200/000/fff" width="100%" height="100%">
+        <div class="col-3" id="productImg">
         </div>
-        <div class="col-3">
-            <h1>Produkt titel</h1>
-            <h4>PRIS</h4>
-            <input type="number" value="1">
-            <a href="" class="addToCartBtnProductDetails"><img src="http://localhost:3000/images/cart.png">Tilføj</a>
-
-            <h3>Beskrivelse</h3>
-            <p>
-                lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum 
-                lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum 
-                lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum 
-            </p>
+        <div class="col-3" id="productDetails">
         </div>
     </div>
 </div>

@@ -33,18 +33,30 @@
                 let str = '';
                 json.forEach(product => {
                     str +=
-                        `<div class="col-4">
+                        `<a href="http://localhost:3000/productdetails/${product.productID}"><div class="col-4">
                         <img src="${product.imageFile}">
                         <h4>${product.name}</h4>
                         <p>${product.price} DKK</p>
                         <a href="" class="addToCartBtn"><img src="http://localhost:3000/images/cart.png">Tilføj</a>                        
-                        </div>`;
+                        </div></a>`;
                 });
 
                 recentProducts.innerHTML = str;
+            }).then(function () {
+                addEventOnAddBtn();
             });
     }
 
+    function addEventOnAddBtn() {
+        let addToCartBtns = document.getElementsByClassName("addToCartBtn");
+
+        Array.from(addToCartBtns).forEach(function (btn) {
+            btn.addEventListener("click", e => {
+                e.preventDefault();
+                console.log('test');
+            });
+        });
+    }
 
     document.addEventListener('DOMContentLoaded', e => {
         showCategories();
@@ -52,7 +64,6 @@
     });
 
 </script>
-
 <div class="row" id="homeRow">
     <div class="col-2">
         <h1>Udviklet på vanilla HTML, CSS, JS og Express - Node.js</h1>

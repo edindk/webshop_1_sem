@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/', (req, res) => {
-    res.render('productDetails');
+router.get('/:id', (req, res) => {
+    res.render('productDetails', { id: req.params.id });
 });
 
 

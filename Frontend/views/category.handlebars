@@ -4,23 +4,40 @@
     let productsByCategoryID;
     productsByCategoryID = document.getElementById('productsByCategoryID');
 
-    fetch('http://localhost:5000/products/getbycategoryid/'+{{ id }})
+    fetch('http://localhost:5000/products/getbycategoryid/' + {{ id }})
     .then(response => response.json())
     .then(json => {
       let str = '';
-                json.forEach(product => {
-                    str +=
-                        `<div class="col-4">
-                        <img src="${product.imageFile}">
-                        <h4>${product.name}</h4>
-                        <p>${product.price} DKK</p>
-                        <a href="" class="addToCartBtn"><img src="http://localhost:3000/images/cart.png">Tilføj</a>                        
-                        </div>`;
-                });
+      json.forEach(product => {
+        str +=
+          `<a href="http://localhost:3000/productdetails/${product.productID}">
+          <div class="col-4">
+          <img src="${product.imageFile}">
+          <h4>${product.name}</h4>
+          <p>${product.price} DKK</p>
+          <a href="/" class="addToCartBtn"><img src="http://localhost:3000/images/cart.png">Tilføj</a>                        
+          </div>
+          </a>`;
+      });
 
-                productsByCategoryID.innerHTML = str;
+      productsByCategoryID.innerHTML = str;
+    })
+    .then(function () {
+      addEventOnAddBtn();
     });
   }
+
+  function addEventOnAddBtn() {
+    let addToCartBtns = document.getElementsByClassName("addToCartBtn");
+
+    Array.from(addToCartBtns).forEach(function (btn) {
+      btn.addEventListener("click", e => {
+        e.preventDefault();
+        console.log('test');
+      });
+    });
+  }
+
 
   window.addEventListener('DOMContentLoaded', e => {
     showProductsByCategoryID();

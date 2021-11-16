@@ -20,6 +20,16 @@ router.get('/getrecent', async function (req, res, next) {
     }
 });
 
+router.get('/:id', async function (req, res, next) {
+    try {
+        res.json(await products.getById(req.params.id));
+    } catch (err) {
+        console.error(`Error while getting product`, err.message);
+        next(err);
+    }
+});
+
+
 router.get('/getbycategoryid/:id', async function (req, res, next) {
     try {
         res.json(await products.getByCategoryId(req.params.id));

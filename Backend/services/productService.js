@@ -14,6 +14,20 @@ async function getMultiple() {
     return products;
 }
 
+async function getById(id) {
+    let productToReturn;
+
+    await Product.findOne({
+        where: { productID: id }
+    })
+        .then(product => {
+            productToReturn = product
+        })
+        .catch(err => console.log(err));
+
+    return productToReturn;
+}
+
 async function getRecent() {
     let products = await getMultiple();
     let recentProducts = [];
@@ -106,6 +120,7 @@ async function remove(id) {
 
 module.exports = {
     getMultiple,
+    getById,
     getRecent,
     getByCategoryId,
     create,
