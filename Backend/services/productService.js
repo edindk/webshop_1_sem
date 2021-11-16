@@ -14,6 +14,31 @@ async function getMultiple() {
     return products;
 }
 
+async function getRecent() {
+    let products = await getMultiple();
+    let recentProducts = [];
+
+    for (var i = products.length - 1; i >= 5; i--) {
+        recentProducts.push(products[i]);
+    }
+
+    return recentProducts;
+}
+
+async function getByCategoryId(id) {
+    let products;
+
+    await Product.findAll({
+        where: { productCategoryID: id }
+    })
+        .then(product => {
+            products = product;
+        })
+        .catch(err => console.log(err));
+
+    return products
+}
+
 async function create(product) {
     let message;
 
@@ -81,6 +106,8 @@ async function remove(id) {
 
 module.exports = {
     getMultiple,
+    getRecent,
+    getByCategoryId,
     create,
     update,
     remove

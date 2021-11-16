@@ -1,142 +1,78 @@
+<script>
+    // Show categories
+    function showCategories() {
+        let categories;
+        categories = document.getElementById('ulCategories');
+
+        fetch('http://localhost:5000/productcategory')
+            .then(response => response.json())
+            .then(json => {
+                let str = '';
+                json.forEach(category => {
+                    str +=
+                        `<li>
+                        <a href="${'http://localhost:3000/category/' + category.productCategoryID + '/' + category.categoryName}">
+                        <img src="${category.imageFile}" height="85px" width="85px">
+                        <p>${category.categoryName}</p>
+                        </a>
+                        </li>`;
+                });
+
+                categories.innerHTML = str;
+            });
+    }
+
+    // Show recent products 
+    function showRecentProducts() {
+        let recentProducts;
+        recentProducts = document.getElementById('recentProducts');
+
+        fetch('http://localhost:5000/products/getrecent')
+            .then(response => response.json())
+            .then(json => {
+                let str = '';
+                json.forEach(product => {
+                    str +=
+                        `<div class="col-4">
+                        <img src="${product.imageFile}">
+                        <h4>${product.name}</h4>
+                        <p>${product.price} DKK</p>
+                        <a href="" class="addToCartBtn"><img src="http://localhost:3000/images/cart.png">Tilføj</a>                        
+                        </div>`;
+                });
+
+                recentProducts.innerHTML = str;
+            });
+    }
+
+
+    document.addEventListener('DOMContentLoaded', e => {
+        showCategories();
+        showRecentProducts();
+    });
+
+</script>
+
 <div class="row" id="homeRow">
     <div class="col-2">
         <h1>Udviklet på vanilla HTML, CSS, JS og Express - Node.js</h1>
         <p>En webshop der er udviklet på vanilla HTML, CSS og JavaScript på frontend-delen! Og en backend der er
             udviklet på Express - Node.js</p>
-        <a href="" class="btn">Se alle produkter <img src="images/bg-arrow.png" height="80px"></a>
+        <a href="/products" class="btn">Se alle produkter <img src="images/bg-arrow.png" height="80px"></a>
     </div>
     <div class="col-2">
         <img src="images/bg-image.png">
     </div>
 </div>
-<!--- Featured categories --->
-{{!-- <div class="categories">
-    <div class="small-container">
-        <div class="row">
-            <div class="col-5">
-                <img src="https://dummyimage.com/300x300/000/fff&text=Placeholder">
-            </div>
-            <div class="col-5">
-                <img src="https://dummyimage.com/300x300/000/fff&text=Placeholder">
-            </div>
-            <div class="col-5">
-                <img src="https://dummyimage.com/300x300/000/fff&text=Placeholder">
-            </div>
-            <div class="col-5">
-                <img src="https://dummyimage.com/300x300/000/fff&text=Placeholder">
-            </div>
-        </div>
-    </div> --}}
-    <div class="categories">
-        <ul>
-            <li>
-                <a href="">
-                    <img src="images/camera.png" height="85px" width="85px">
-                    <p>Foto og video</p>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <img src="images/camera.png" height="85px" width="85px">
-                    <p>Foto og video</p>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <img src="images/camera.png" height="85px" width="85px">
-                    <p>Foto og video</p>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <img src="images/camera.png" height="85px" width="85px">
-                    <p>Foto og video</p>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <img src="images/camera.png" height="85px" width="85px">
-                    <p>Foto og video</p>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <img src="images/camera.png" height="85px" width="85px">
-                    <p>Foto og video</p>
-                </a>
-            </li>
-                        <li>
-                <a href="">
-                    <img src="images/camera.png" height="85px" width="85px">
-                    <p>Foto og video</p>
-                </a>
-            </li>
-                        <li>
-                <a href="">
-                    <img src="images/camera.png" height="85px" width="85px">
-                    <p>Foto og video</p>
-                </a>
-            </li>
-                        <li>
-                <a href="">
-                    <img src="images/camera.png" height="85px" width="85px">
-                    <p>Foto og video</p>
-                </a>
-            </li>
-                        <li>
-                <a href="">
-                    <img src="images/camera.png" height="85px" width="85px">
-                    <p>Foto og video</p>
-                </a>
-            </li>
-                        <li>
-                <a href="">
-                    <img src="images/camera.png" height="85px" width="85px">
-                    <p>Foto og video</p>
-                </a>
-            </li>
-        </ul>
+<div class="categories">
+    <ul id="ulCategories">
+    </ul>
 
+</div>
+<!--- Recent added products --->
+<div class="small-container">
+    <h2>Senest tilføjede produkter</h2>
+    <div class="row" id="recentProducts">
     </div>
-    <!--- Featured products --->
-    <div class="small-container">
-        <h2>Senest tilføjede produkter</h2>
-        <div class="row">
-            <div class="col-4">
-                <img src="https://dummyimage.com/300x300/000/fff&text=Placeholder">
-                <h4>Produkt navn</h4>
-                <p>100 DKK</p>
-            </div>
-            <div class="col-4">
-                <img src="https://dummyimage.com/300x300/000/fff&text=Placeholder">
-                <h4>Produkt navn</h4>
-                <p>100 DKK</p>
-            </div>
-            <div class="col-4">
-                <img src="https://dummyimage.com/300x300/000/fff&text=Placeholder">
-                <h4>Produkt navn</h4>
-                <p>100 DKK</p>
-            </div>
-            <div class="col-4">
-                <img src="https://dummyimage.com/300x300/000/fff&text=Placeholder">
-                <h4>Produkt navn</h4>
-                <p>100 DKK</p>
-            </div>
-            <div class="col-4">
-                <img src="https://dummyimage.com/300x300/000/fff&text=Placeholder">
-                <h4>Produkt navn</h4>
-                <p>100 DKK</p>
-            </div>
-            <div class="col-4">
-                <img src="https://dummyimage.com/300x300/000/fff&text=Placeholder">
-                <h4>Produkt navn</h4>
-                <p>100 DKK</p>
-            </div>
-            <div class="col-4">
-                <img src="https://dummyimage.com/300x300/000/fff&text=Placeholder">
-                <h4>Produkt navn</h4>
-                <p>100 DKK</p>
-            </div>
-        </div>
-    </div>
+</div>
 </div>

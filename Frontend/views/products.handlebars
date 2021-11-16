@@ -1,0 +1,34 @@
+<script>
+    // Show products by categoryID
+    function showAllProducts() {
+        let products;
+        products = document.getElementById('allProducts');
+
+        fetch('http://localhost:5000/products/')
+            .then(response => response.json())
+            .then(json => {
+                let str = '';
+                json.forEach(product => {
+                    str +=
+                        `<div class="col-4">
+                        <img src="${product.imageFile}">
+                        <h4>${product.name}</h4>
+                        <p>${product.price} DKK</p>
+                        <a href="" class="addToCartBtn"><img src="http://localhost:3000/images/cart.png">Tilføj</a>                        
+                        </div>`;
+                });
+
+                allProducts.innerHTML = str;
+            });
+    }
+
+    window.addEventListener('DOMContentLoaded', e => {
+        showAllProducts();
+    });
+
+</script>
+<div class="small-container">
+    <h2>Alle produkter</h2>
+    <div class="row" id="allProducts">
+    </div>
+</div>

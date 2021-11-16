@@ -5,7 +5,16 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+// Routes
 var indexRouter = require('./routes/index');
+var categoryRouter = require('./routes/category');
+var productsRouter = require('./routes/products');
+var productDetailsRouter = require('./routes/productDetails');
+
+app.use('/', indexRouter);
+app.use('/category', categoryRouter);
+app.use('/products', productsRouter);
+app.use('/productdetails', productDetailsRouter);
 
 //Loads the handlebars module
 const handlebars = require('express-handlebars');
@@ -21,9 +30,6 @@ app.engine('handlebars', handlebars({
 
 //Serves static files
 app.use(express.static('public'))
-
-// Routes
-app.use('/', indexRouter);
 
 //Makes the app listen to port 3000
 app.listen(port, () => console.log(`App listening to port ${port}`));
