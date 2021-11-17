@@ -10,11 +10,13 @@ var indexRouter = require('./routes/index');
 var categoryRouter = require('./routes/category');
 var productsRouter = require('./routes/products');
 var productDetailsRouter = require('./routes/productDetails');
+var cartRouter = require('./routes/cart');
 
 app.use('/', indexRouter);
 app.use('/category', categoryRouter);
 app.use('/products', productsRouter);
 app.use('/productdetails', productDetailsRouter);
+app.use('/cart', cartRouter);
 
 //Loads the handlebars module
 const handlebars = require('express-handlebars');

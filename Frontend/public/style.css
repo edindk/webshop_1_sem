@@ -182,3 +182,31 @@ p {
   max-width: 100%;
   padding: 20px 0;
 }
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+th {
+  text-align: center;
+}
+
+#productCartImg {
+  width: 18%;
+  float: left;
+}
+
+#productDescription,
+h4 {
+  width: 80%;
+  float: right;
+}
+#checkoutBtn{
+  flex-basis: 20%;
+  margin-inline-start: auto;
+}
