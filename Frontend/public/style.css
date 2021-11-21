@@ -210,3 +210,10 @@ h4 {
   flex-basis: 20%;
   margin-inline-start: auto;
 }
+#quantitySection {
+  text-align: center;
+}
+
+#quantity {
+  width: 30%;
+}

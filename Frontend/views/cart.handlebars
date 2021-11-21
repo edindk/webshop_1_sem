@@ -1,7 +1,42 @@
+<script>
+    function showShoppingCart() {
+        let shoppingCartTable = document.getElementById('shoppingCartTable');
+
+        let shoppingCart = JSON.parse(window.localStorage.getItem('shoppingCart'));
+        let str = '';
+        shoppingCart.forEach(product => {
+            let subTotal = parseInt(product.price) * parseInt(product.quantity);
+            subTotal = subTotal + ".00";
+            str += `<tr>
+                <td>
+                    <img id="productCartImg"
+                    src="${product.imgFile}"
+                    alt="">
+                    <h4>${product.name}</h4>
+                </td>
+                <td>
+                    <div id="quantitySection">
+                        <select id="quantity"></select>
+                    </div>
+                </td>
+                <td>${product.price}</td>
+                <td>${subTotal} DKK</td>
+                <td>
+                    <img src="images/delete.png" width="30px" alt="">
+                </td>
+            </tr>`;
+        });
+        shoppingCartTable.innerHTML = str;
+    }
+
+    document.addEventListener('DOMContentLoaded', e => {
+        showShoppingCart();
+    });
+</script>
 <div class="small-container">
     <h2>Varer i inkøbskurv</h2>
     <div class="row">
-        <table>
+        <table id="shoppingCartTable">
             <tr>
                 <th>Produkt</th>
                 <th>Antal</th>
@@ -9,43 +44,7 @@
                 <th>Subtotal</th>
                 <th>Slet</th>
             </tr>
-            <tr>
-                <td>
-                    <img id="productCartImg"
-                        src="http://localhost:5000/images/products/Nintendo-Switch-Red-Blue---2019.jpeg"
-                        alt="Your Image">
-                    <h4>Nintendo Switch - Red/Blue - 2019</h4>
-                    <p id="productDescription">Nintendo Switch – Red/Blue – 2019 er en spillekonsol med Joy-Con motion
-                        controllers, op til ni timers batteri og 6,2” HD-skærm. Find mange populære spil til Nintendo
-                        Switch.</p>
-                </td>
-                <td>
-                    <p>Nintendo Switch – Red/Blue – 2019 er en spillekonsol med Joy-Con motion controllers, op til ni
-                        timers batteri og 6,2” HD-skærm. Find mange populære spil til Nintendo Switch.</p>
-                </td>
-                <td>3000 DKK</td>
-                <td>6000 DKK</td>
-                <td>X</td>
-            </tr>
-            <tr>
-                <td>
-                    <img id="productCartImg"
-                        src="http://localhost:5000/images/products/Nintendo-Switch-Red-Blue---2019.jpeg"
-                        alt="Your Image">
-                    <h4>Nintendo Switch - Red/Blue - 2019</h4>
-                    <p id="productDescription">Nintendo Switch – Red/Blue – 2019 er en spillekonsol med Joy-Con motion
-                        controllers, op til ni timers batteri og 6,2” HD-skærm. Find mange populære spil til Nintendo
-                        Switch.</p>
-                </td>
-                <td>
-                    <p>Nintendo Switch – Red/Blue – 2019 er en spillekonsol med Joy-Con motion controllers, op til ni
-                        timers batteri og 6,2” HD-skærm. Find mange populære spil til Nintendo Switch.</p>
-                </td>
-                <td>3000 DKK</td>
-                <td>6000 DKK</td>
-                <td>X</td>
-            </tr>
         </table>
-        <a href="" class="addToCartBtn" id="checkoutBtn">Gå til kassen</a>                        
+        <a href="" class="addToCartBtn" id="checkoutBtn">Gå til kassen</a>
     </div>
 </div>
