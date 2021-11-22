@@ -200,12 +200,6 @@ th {
   width: 18%;
   float: left;
 }
-
-#productDescription,
-h4 {
-  width: 80%;
-  float: right;
-}
 #checkoutBtn{
   flex-basis: 20%;
   margin-inline-start: auto;

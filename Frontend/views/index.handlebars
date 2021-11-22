@@ -37,6 +37,7 @@
                         <img src="${product.imageFile}">
                         <h4>${product.name}</h4>
                         <p hidden class="productID">${product.productID}</p>
+                        <p hidden class="description">${product.description}</p>
                         <p class="price">${product.price} DKK</p>
                         <a href="" class="addToCartBtn"><img src="http://localhost:3000/images/cart.png">Tilføj</a>                        
                         </div></a>`;
@@ -88,9 +89,10 @@
                 let imgFile = productElement.querySelector('img').getAttribute('src');
                 let name = productElement.querySelector('h4').textContent;
                 let productID = productElement.querySelector('p.productID').textContent;
+                let description = productElement.querySelector('p.description').textContent;
                 let price = productElement.querySelector('p.price').textContent;
 
-                let obj = { "imgFile": imgFile, "name": name, "productID": productID, "price": price, "quantity": 1 };
+                let obj = { "imgFile": imgFile, "name": name, "productID": productID, "price": price, "description": description, "quantity": 1 };
                 addToCart(obj);
             });
         });

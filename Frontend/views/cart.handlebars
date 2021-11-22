@@ -1,4 +1,5 @@
 <script>
+    // Show products in cart
     function showShoppingCart() {
         let shoppingCartTable = document.getElementById('shoppingCartTable');
 
@@ -10,23 +11,71 @@
             str += `<tr>
                 <td>
                     <img id="productCartImg"
-                    src="${product.imgFile}"
-                    alt="">
+                    src="${product.imgFile}" alt="">
                     <h4>${product.name}</h4>
+                    <p>${product.description}</p>
                 </td>
                 <td>
                     <div id="quantitySection">
-                        <select id="quantity"></select>
+                        <button id="quantityMinus-${product.productID}" style="width: 20%">-</button><input id="quantityInput-${product.productID}" value="${product.quantity}" style="width: 40%; text-align: center;"></input><button id="quantityPlus-${product.productID}" style="width: 20%">+</button>
                     </div>
                 </td>
                 <td>${product.price}</td>
-                <td>${subTotal} DKK</td>
+                <td id="subTotal-${product.productID}">${subTotal} DKK</td>
                 <td>
-                    <img src="images/delete.png" width="30px" alt="">
+                    <a href="" id="deleteBtn-${product.productID}"><img src="images/delete.png" width="30px" alt=""></a>
                 </td>
             </tr>`;
         });
-        shoppingCartTable.innerHTML = str;
+        shoppingCartTable.innerHTML += str;
+
+        showQuantity(shoppingCart);
+    }
+    // Show quantity of products
+    function showQuantity(shoppingCart) {
+        let tempShoppingCart = shoppingCart;
+
+        tempShoppingCart.forEach(product => {
+            let quantityInput = document.getElementById('quantityInput-' + product.productID);
+            let quantityMinus = document.getElementById('quantityMinus-' + product.productID);
+            let quantityPlus = document.getElementById('quantityPlus-' + product.productID);
+            let subTotal = document.getElementById('subTotal-' + product.productID);
+            let deleteBtn = document.getElementById('deleteBtn-' + product.productID);
+
+            deleteBtn.addEventListener('click', e => {
+                e.preventDefault();
+                let index = tempShoppingCart.indexOf(product);
+                tempShoppingCart.splice(index, 1);
+                window.localStorage.setItem('shoppingCart', JSON.stringify(tempShoppingCart));
+                
+            });
+
+            quantityMinus.addEventListener('click', e => {
+                quantityInput.value = quantityInput.value - 1;
+                product.quantity = quantityInput.value;
+
+                window.localStorage.setItem('shoppingCart', JSON.stringify(tempShoppingCart));
+            });
+
+            quantityPlus.addEventListener('click', e => {
+                quantityInput.value = parseInt(quantityInput.value) + 1
+                product.quantity = quantityInput.value;
+
+                window.localStorage.setItem('shoppingCart', JSON.stringify(tempShoppingCart));
+            });
+
+
+            quantityInput.addEventListener('input', e => {
+                product.quantity = e.target.value;
+                let newSubTotal = parseInt(product.price) * parseInt(e.target.value);
+                subTotal.innerText = newSubTotal + ".00 DKK";
+                if (!newSubTotal) {
+                    subTotal.innerText = "0 DKK";
+                }
+
+                window.localStorage.setItem('shoppingCart', JSON.stringify(tempShoppingCart));
+            });
+        });
     }
 
     document.addEventListener('DOMContentLoaded', e => {
@@ -45,6 +94,7 @@
                 <th>Slet</th>
             </tr>
         </table>
+        <p>Total: 1.000.000 DKK</p>
         <a href="" class="addToCartBtn" id="checkoutBtn">Gå til kassen</a>
     </div>
 </div>
