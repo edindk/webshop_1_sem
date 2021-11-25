@@ -1,0 +1,14 @@
+const express = require('express');
+const router = express.Router();
+const customer = require('../services/customerService');
+
+router.get('/:email', async function (req, res, next) {
+    try {
+        res.json(await customer.getByEmail(req.params.email));
+    } catch (err) {
+        console.error(`Error while getting customer`, err.message);
+        next(err);
+    }
+});
+
+module.exports = router;

@@ -1,0 +1,168 @@
+<script>
+    function addEventListenersOnBtns(businessCustomerForm) {
+        let privateCustomerBtn = document.getElementById('privateCustomerBtn');
+        let businessCustomerBtn = document.getElementById('businessCustomerBtn');
+        const privateCustomerForm = document.getElementById('privateCustomerForm');
+        const savedBusinessCustomerForm = businessCustomerForm;
+
+        privateCustomerBtn.addEventListener('click', e => {
+            e.preventDefault();
+
+            let tempBusinessCustomerForm = document.getElementById('businessCustomerForm');
+            tempBusinessCustomerForm.remove();
+
+            let register = document.getElementById('register');
+
+            register.innerHTML += privateCustomerForm.outerHTML;
+
+        });
+
+        businessCustomerBtn.addEventListener('click', e => {
+            e.preventDefault();
+            let tempPrivateCustomerForm = document.getElementById('privateCustomerForm');
+            if (tempPrivateCustomerForm) {
+                tempPrivateCustomerForm.remove();
+            }
+
+            let register = document.getElementById('register');
+            register.innerHTML += savedBusinessCustomerForm.outerHTML;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', e => {
+        // Default show form for private customers
+        let businessCustomerForm = document.getElementById('businessCustomerForm');
+        businessCustomerForm.remove();
+
+        addEventListenersOnBtns(businessCustomerForm);
+    });
+</script>
+{{#if message}}
+<h2 style="text-align: center; color: red;">{{ message }}</h2>
+{{/if}}
+<div class="small-container">
+    <div class="row" id="authentication-row">
+        <!--- Log in --->
+        <div class="col-2">
+            <h1>Log ind</h1>
+            <form method="POST" action="/login">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input name="email" type="email" id="email" placeholder="Indtast e-mail">
+                </div>
+                <div class="form-group">
+                    <label for="password">Adgangskode</label>
+                    <input name="password" type="password" id="password" placeholder="Adgangskode">
+                </div>
+                <a href="/products" class="auth-btn">Log ind</a>
+            </form>
+        </div>
+        <div class="col-2" id="register">
+            <h1>Ikke oprettet? Registrer nu!</h1>
+            <a class="customer-type-btn" id="privateCustomerBtn" href="">Privatkunde</a>
+            <a class="customer-type-btn" id="businessCustomerBtn" href="">Erhvervskunde</a>
+            <!--- Private customer form--->
+            <form method="POST" action="/authentication/register" id="privateCustomerForm">
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="email">E-mail</label>
+                    <input name="email" type="email" id="email" placeholder="Indtast e-mail">
+                </div>
+                <div class="form-group">
+                    <label for="password">Adgangskode</label>
+                    <input name="password" type="password" id="password" placeholder="Adgangskode">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Gentag adgangskode</label>
+                    <input name="confirmPassword" type="password" id="confirmPassword" placeholder="Adgangskode">
+                </div>
+                <div class="form-group">
+                    <label for="name">Navn</label>
+                    <input name="name" type="text" id="name" placeholder="Navn">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Efternavn</label>
+                    <input name="lastName" type="text" id="lastName" placeholder="Efternavn">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Telefon</label>
+                    <input name="phone" type="number" id="phone" placeholder="Telefon">
+                </div>
+                <div class="form-group">
+                    <label for="country">Land</label>
+                    <div>
+                        <select name="country" id="country"
+                            style="width: 100%; text-align: center; border-radius: 50px;">
+                            <option value="denmark">Danmark</option>
+                            <option value="sweden">Sverige</option>
+                            <option value="norway">Norge</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Adresse</label>
+                    <input name="address" type="text" id="address" placeholder="Adresse">
+                </div>
+                <div class="form-group">
+                    <label for="zipCode">Postnummer</label>
+                    <input name="zipCode" type="number" id="zipCode" placeholder="Postnummer">
+                </div>
+                <button type="submit" class="auth-btn">Registrer</button>
+            </form>
+            <!--- Business customer form--->
+            <form method="POST" action="/authentication/register" id="businessCustomerForm">
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="email">E-mail</label>
+                    <input name="email" type="email" id="email" placeholder="Indtast e-mail">
+                </div>
+                <div class="form-group">
+                    <label for="password">Adgangskode</label>
+                    <input name="password" type="password" id="password" placeholder="Adgangskode">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Gentag adgangskode</label>
+                    <input name="confirmPassword" type="password" id="confirmPassword" placeholder="Adgangskode">
+                </div>
+                <div class="form-group">
+                    <label for="name">Navn</label>
+                    <input name="name" type="text" id="name" placeholder="Navn">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Efternavn</label>
+                    <input name="lastName" type="text" id="lastName" placeholder="Efternavn">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Telefon</label>
+                    <input name="phone" type="number" id="phone" placeholder="Telefon">
+                </div>
+                <div class="form-group">
+                    <label for="country">Land</label>
+                    <div>
+                        <select name="country" id="country"
+                            style="width: 100%; text-align: center; border-radius: 50px;">
+                            <option value="denmark">Danmark</option>
+                            <option value="sweden">Sverige</option>
+                            <option value="norway">Norge</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Adresse</label>
+                    <input name="address" type="text" id="address" placeholder="Adresse">
+                </div>
+                <div class="form-group">
+                    <label for="zipCode">Postnummer</label>
+                    <input name="zipCode" type="number" id="zipCode" placeholder="Postnummer">
+                </div>
+                <div class="form-group">
+                    <label for="company">Virksomhed</label>
+                    <input name="company" type="text" id="company" placeholder="Virksomhed">
+                </div>
+                <div class="form-group">
+                    <label for="cvr">CVR</label>
+                    <input name="cvr" type="number" id="cvr" placeholder="CVR">
+                </div>
+                <button type="submit" class="auth-btn">Registrer</button>
+            </form>
+        </div>
+    </div>
+</div>

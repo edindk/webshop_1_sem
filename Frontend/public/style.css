@@ -211,3 +211,40 @@ th {
 #quantity {
   width: 30%;
 }
+input {
+  width: 100%;
+  border-radius: 50px;
+  height: 30px;
+  text-align: center;
+  border-style: solid;
+  margin: 5px 5px;
+}
+
+.auth-btn {
+  color: white;
+  background-color: #28a745;
+  margin: 10px 0;
+  border-radius: 50px;
+  text-align: center;
+  transition: background 0.5s;
+  width: 100%;
+  padding: 5px;
+  height: 35px;
+  display: block;
+  border-style: none;
+}
+
+.auth-btn:hover {
+  background: #218838;
+}
+.customer-type-btn {
+  color: white;
+  background-color: #007BFF;
+  border-radius: 50px;
+  transition: background 0.5s;
+  padding: 5px;   
+}
+
+.customer-type-btn:hover {
+  background: #0069D9;
+}
