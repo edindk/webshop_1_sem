@@ -1,8 +1,14 @@
 <script>
     // Show products in cart
     function showShoppingCart() {
-        let shoppingCartTable = document.getElementById('shoppingCartTable');
 
+        let shoppingCartTable = document.getElementById('shoppingCartTable');
+        let tdElements = shoppingCartTable.getElementsByTagName('td');
+        Array.from(tdElements).forEach(td => {
+            td.outerHTML = '';
+        });
+
+        //shoppingCartTable.innerHTML = '';
         let shoppingCart = JSON.parse(window.localStorage.getItem('shoppingCart'));
         let str = '';
         shoppingCart.forEach(product => {
@@ -47,7 +53,7 @@
                 let index = tempShoppingCart.indexOf(product);
                 tempShoppingCart.splice(index, 1);
                 window.localStorage.setItem('shoppingCart', JSON.stringify(tempShoppingCart));
-                
+                showShoppingCart();
             });
 
             quantityMinus.addEventListener('click', e => {
@@ -55,6 +61,7 @@
                 product.quantity = quantityInput.value;
 
                 window.localStorage.setItem('shoppingCart', JSON.stringify(tempShoppingCart));
+                showShoppingCart();
             });
 
             quantityPlus.addEventListener('click', e => {
@@ -62,6 +69,7 @@
                 product.quantity = quantityInput.value;
 
                 window.localStorage.setItem('shoppingCart', JSON.stringify(tempShoppingCart));
+                showShoppingCart();
             });
 
 
@@ -74,6 +82,7 @@
                 }
 
                 window.localStorage.setItem('shoppingCart', JSON.stringify(tempShoppingCart));
+                showShoppingCart();
             });
         });
     }
