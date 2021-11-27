@@ -1,13 +1,40 @@
 var express = require('express');
 const axios = require('axios');
+const cookieParser = require('cookie-parser');
+const { create } = require('../../Backend/services/productService');
 var router = express.Router();
+
+router.use(cookieParser());
+
+router.use((req, res, next) => {
+    //Get auth token from the cookies
+    req.cookies['AuthToken']
+    const authToken = req.cookies['AuthToken'];
+    
+    if (req.cookies['CustomerData']) {
+        const customerData = req.cookies['CustomerData'];
+    }
+
+    next();
+
+});
 
 router.get('/', (req, res) => {
     res.render('login');
 });
 
+
+const getHashedPassword = (password) => {
+    var bcrypt = require('bcryptjs');
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync(password, salt);
+
+    return { hash, salt };
+}
+
 router.post('/register', (req, res) => {
-    const { email, password, confirmPassword, name, lastName, phone, country, address, zipCode, company, cvr } = req.body;
+    const { email, password, confirmPassword, name, lastName, phone, country, address, zipCode, company, cvr, companyType } = req.body;
+
     // Checks password
     if (password === confirmPassword) {
 
@@ -15,40 +42,125 @@ router.post('/register', (req, res) => {
         let customerRegistered
         axios.get('http://localhost:5000/customer/' + email)
             .then(res => {
-                customerRegistered = res.data
-                renderView();
+                if (res.data.email) {
+                    customerRegistered = true;
+                    renderView();
+                }
+                else {
+                    createCustomer();
+                }
             }).catch(err => {
                 console.log('Error: ', err.message);
             });
 
         function renderView() {
-            if (customerRegistered) {
-                res.render('login', {
-                    message: 'Bruger med mailen: ' + email + ' findes allerede',
-
-                });
-                return;
-            }
+            res.render('login', {
+                message: 'Bruger med mailen: ' + email + ' findes allerede',
+            });
+            return;
         }
 
-        // const hashedPassword = getHashedPassword(password);
+        function createCustomer() {
+            const hashedPassword = getHashedPassword(password);
 
-        // // Store user into the database if you are using one
-        // users.push({
-        //     firstName,
-        //     lastName,
-        //     email,
-        //     password: hashedPassword.hash,
-        //     salt: hashedPassword.salt
-        // });
+            // Store user in DB
+            axios.post('http://localhost:5000/customer/', {
+                email: email,
+                phone: phone,
+                address: address,
+                companyName: company,
+                country: country,
+                zipCode: zipCode,
+                firstName: name,
+                lastName: lastName,
+                companyType: companyType,
+                cvr: cvr,
+                password: hashedPassword.hash,
+                salt: hashedPassword.salt
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
 
-        // console.log(users);
+            res.render('login', {
+                message: 'Oprettelse vellykket. Log ind nu.',
+            });
+        }
 
-        // res.render('login', {
-        //     message: 'Registration Complete. Please login to continue.',
-        //     messageClass: 'alert-success'
-        // });
     }
 });
+
+async function checkPassword(email, password) {
+    var bcrypt = require('bcryptjs');
+    let hashedPassword = '';
+    let customer = '';
+
+    return await axios.get('http://localhost:5000/customer/' + email)
+        .then(res => {
+            if (res.data) {
+                hashedPassword = bcrypt.hashSync(password, res.data.salt);
+                customer = res.data;
+            }
+            return { hashedPassword, customer };
+        }).catch(err => {
+            console.log('Error: ', err.message);
+        });
+}
+
+// Generates authtoken
+const generateAuthToken = () => {
+    const crypto = require('crypto');
+    return crypto.randomBytes(30).toString('hex');
+}
+
+
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    const hashedPasswordAndCustomer = await checkPassword(email, password);
+    const customer = hashedPasswordAndCustomer.customer;
+    const hashedPassword = hashedPasswordAndCustomer.hashedPassword;
+
+
+    if (customer) {
+        if (customer.email === email && hashedPassword === customer.password) {
+            const authToken = generateAuthToken();
+
+            await axios.post('http://localhost:5000/customer/authtoken', {
+                authToken: authToken,
+                customerID: customer.customerID
+            }).then(() => {
+                //max-age=${60 * 60 * 24 * 14}
+                res.cookie('AuthToken', authToken);
+
+                let customerData = {
+                    "customerID": customer.customerID,
+                    "phone": customer.phone,
+                    "address": customer.address,
+                    "companyTypeID": customer.companyTypeID,
+                    "countryID": customer.countryID,
+                    "zipCode": customer.zipCode,
+                    "createDate": customer.createDate,
+                    "modifiedDate": customer.modifiedDate,
+                    "firstName": customer.firstName,
+                    "lastName": customer.lastName,
+                    "companyName": customer.companyName,
+                    "CVR": customer.CVR,
+                }
+
+                res.cookie('CustomerData', customerData);
+                res.redirect('http://localhost:3000/');
+            })
+        }
+    }
+    else {
+        res.render('login', {
+            message: 'Ugyldigt brugernavn eller adgangskode'
+        });
+    }
+
+})
 
 module.exports = router;

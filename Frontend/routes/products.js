@@ -2,7 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render('products');
+    let customerData = req.cookies['CustomerData'];
+    res.render('products', {
+        'customerData': customerData
+    });
 });
 
 

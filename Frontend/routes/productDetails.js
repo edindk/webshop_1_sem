@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/:id', (req, res) => {
-    res.render('productDetails', { id: req.params.id });
+    let customerData = req.cookies['CustomerData'];
+    res.render('productDetails', { id: req.params.id, 'customerData': customerData });
 });
 
 

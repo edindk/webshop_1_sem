@@ -30,7 +30,12 @@
                     </ul>
                 </nav>
                 <a href="/cart"><img src="http://localhost:3000/images/cart.png" height="30px" width="30px"></a>
-                <a href="" class="btn">Log ind<img src="http://localhost:3000/images/person.png" height="25px" width="25px"></a>
+                {{#if customerData}}
+                <a href="" style="margin-left: 60px;">Hej, {{customerData.firstName}}</a>
+                {{else}}
+                <a href="http://localhost:3000/authentication" class="btn" id="login">Log ind<img
+                        src="http://localhost:3000/images/person.png" height="25px" width="25px"></a>
+                {{/if}}
             </div>
         </div>
     </div>

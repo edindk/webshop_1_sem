@@ -5,6 +5,7 @@ const Customer = db.define('customer', {
     customerID: {
         type: Sequelize.SMALLINT,
         primaryKey: true,
+        autoIncrement: true
     },
     email: {
         type: Sequelize.STRING
@@ -25,7 +26,8 @@ const Customer = db.define('customer', {
         type: Sequelize.SMALLINT
     },
     isActive: {
-        type: Sequelize.TINYINT
+        type: Sequelize.TINYINT,
+        defaultValue: 1
     },
     createDate: {
         type: Sequelize.DATE
@@ -44,6 +46,12 @@ const Customer = db.define('customer', {
     },
     CVR: {
         type: Sequelize.SMALLINT
+    },
+    password: {
+        type: Sequelize.STRING
+    },
+    salt: {
+        type: Sequelize.STRING
     }
 },
     {
