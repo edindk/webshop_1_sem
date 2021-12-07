@@ -5,6 +5,7 @@ const Product = db.define('product', {
     productID: {
         type: Sequelize.SMALLINT,
         primaryKey: true,
+        autoIncrement: true
     },
     productCategoryID: {
         type: Sequelize.SMALLINT,

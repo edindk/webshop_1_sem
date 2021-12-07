@@ -1,6 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const products = require('../services/productService');
+const multer = require('multer')
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/images/products')
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.originalname);
+    }
+})
+
+var upload = multer({ storage: storage });
 
 router.get('/', async function (req, res, next) {
     try {
@@ -39,9 +50,11 @@ router.get('/getbycategoryid/:id', async function (req, res, next) {
     }
 });
 
-router.post('/', async function (req, res, next) {
+router.post('/', upload.single('imageFile'), async function (req, res, next) {
+    let imageFile = 'http://localhost:5000/images/products/' + req.file.originalname;
     try {
-        res.json(await products.create(req.body));
+        await products.create(req.body, imageFile);
+        res.redirect('http://localhost:3000/admin');
     } catch (err) {
         console.error(`Error while creating product`, err.message);
         next(err);

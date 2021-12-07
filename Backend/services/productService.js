@@ -1,3 +1,4 @@
+const { application } = require('express');
 const express = require('express');
 const db = require('../config/database');
 const Product = require('../models/product');
@@ -53,24 +54,25 @@ async function getByCategoryId(id) {
     return products
 }
 
-async function create(product) {
+async function create(productData, imageFile) {
     let message;
-
+    console.log(productData);
     const newProduct = Product.build({
-        productCategoryID: product.productCategoryID,
-        name: product.name,
-        description: product.description,
-        partNumber: product.partNumber,
-        price: product.price,
-        inStock: product.inStock,
-        isActive: product.isActive
+        name: productData.name,
+        productCategoryID: productData.productCategory,
+        description: productData.description,
+        price: productData.price,
+        inStock: productData.inStock,
+        imageFile: imageFile,
+        isActive: 1,
+        partNumber: Math.random()
     });
 
     await newProduct.save()
         .then(newProduct => {
             message = 'Product created successfully';
         })
-        .catch(err => message = 'Error in creating product');
+        .catch(err => message = 'Error in creating product ' + err);
 
     return message;
 }
