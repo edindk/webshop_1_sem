@@ -18,6 +18,8 @@ var productsRouter = require('./routes/products');
 var productDetailsRouter = require('./routes/productDetails');
 var cartRouter = require('./routes/cart');
 var authenticationRouter = require('./routes/authentication');
+var customerDetailsRouter = require('./routes/customerDetails');
+var checkoutRouter = require('./routes/checkout');
 
 app.use('/', indexRouter);
 app.use('/category', categoryRouter);
@@ -25,6 +27,8 @@ app.use('/products', productsRouter);
 app.use('/productdetails', productDetailsRouter);
 app.use('/cart', cartRouter);
 app.use('/authentication', authenticationRouter);
+app.use('/customerdetails', customerDetailsRouter);
+app.use('/checkout', checkoutRouter);
 
 //Loads the handlebars module
 const handlebars = require('express-handlebars');

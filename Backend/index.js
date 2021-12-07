@@ -18,6 +18,7 @@ app.use(
 app.use('/products', require('./routes/productRouter'));
 app.use('/productcategory', require('./routes/productCategoryRouter'));
 app.use('/customer', require('./routes/customerRouter'));
+app.use('/invoice', require('./routes/invoiceRouter'));
 
 // Serves static files
 app.use(express.static('public'))

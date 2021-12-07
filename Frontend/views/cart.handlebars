@@ -4,15 +4,19 @@
 
         let shoppingCartTable = document.getElementById('shoppingCartTable');
         let tdElements = shoppingCartTable.getElementsByTagName('td');
+        let totalElement = document.getElementById('total');
+
         Array.from(tdElements).forEach(td => {
             td.outerHTML = '';
         });
 
         //shoppingCartTable.innerHTML = '';
         let shoppingCart = JSON.parse(window.localStorage.getItem('shoppingCart'));
+        let total = 0;
         let str = '';
         shoppingCart.forEach(product => {
             let subTotal = parseInt(product.price) * parseInt(product.quantity);
+            total += subTotal;
             subTotal = subTotal + ".00";
             str += `<tr>
                 <td>
@@ -34,6 +38,8 @@
             </tr>`;
         });
         shoppingCartTable.innerHTML += str;
+        totalElement.innerHTML = '';
+        totalElement.innerHTML = 'Total: ' + total + ' DKK';
 
         showQuantity(shoppingCart);
     }
@@ -103,7 +109,7 @@
                 <th>Slet</th>
             </tr>
         </table>
-        <p>Total: 1.000.000 DKK</p>
-        <a href="" class="addToCartBtn" id="checkoutBtn">Gå til kassen</a>
+        <p id="total">Total: 0 DKK</p>
+        <a href="http://localhost:3000/checkout/" class="addToCartBtn" id="checkoutBtn">Gå til kassen</a>
     </div>
 </div>

@@ -1,0 +1,61 @@
+{{#if message}}
+<h2 style="text-align: center;">{{message}}</h2>
+{{/if}}
+<div class="small-container">
+    <h1>Kundeoplysninger</h1>
+    <div class="row">
+        <!--- Customer information --->
+        <div class="col-2">
+            <form method="POST" action="/authentication/update" id="privateCustomerForm">
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="email">E-mail</label>
+                    <input name="email" type="email" id="email" placeholder="{{customerData.email}}">
+                </div>
+                <div class="form-group">
+                    <label for="password">Adgangskode</label>
+                    <input name="password" type="password" id="password" placeholder="Adgangskode">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Gentag adgangskode</label>
+                    <input name="confirmPassword" type="password" id="confirmPassword" placeholder="Adgangskode">
+                </div>
+                <div class="form-group">
+                    <label for="name">Navn</label>
+                    <input name="name" type="text" id="name" placeholder="{{customerData.firstName}}">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Efternavn</label>
+                    <input name="lastName" type="text" id="lastName" placeholder="{{customerData.lastName}}">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Telefon</label>
+                    <input name="phone" type="number" id="phone" placeholder="{{customerData.phone}}">
+                </div>
+                <div class="form-group">
+                    <label for="country">Land</label>
+                    <div>
+                        <select name="country" id="country"
+                            style="width: 100%; text-align: center; border-radius: 50px;">
+                            <option value="1" selected="selected">Danmark</option>
+                            <option value="2">Sverige</option>
+                            <option value="3">Norge</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Adresse</label>
+                    <input name="address" type="text" id="address" placeholder="{{customerData.address}}">
+                </div>
+                <div class="form-group">
+                    <label for="zipCode">Postnummer</label>
+                    <input name="zipCode" type="number" id="zipCode" placeholder="{{customerData.zipCode}}">
+                </div>
+                <button type="submit" class="auth-btn">Opdater oplysninger</button>
+            </form>
+            <div>
+                <a href="/authentication/logout"><button type="submit" class="auth-btn"
+                        style="background-color: orange;">Log ud</button></a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+<script>
+    function showOrder() {
+
+        let shoppingCartTable = document.getElementById('shoppingCartTable');
+        let tdElements = shoppingCartTable.getElementsByTagName('td');
+        let totalElement = document.getElementById('total');
+
+        Array.from(tdElements).forEach(td => {
+            td.outerHTML = '';
+        });
+
+
+        let shoppingCart = JSON.parse(window.localStorage.getItem('shoppingCart'));
+        let total = 0;
+        let str = '';
+        shoppingCart.forEach(product => {
+            let subTotal = parseInt(product.price) * parseInt(product.quantity);
+            total += subTotal;
+            subTotal = subTotal + ".00";
+            str += `<tr>
+                <td>
+                    <img id="productCartImg"
+                    src="${product.imgFile}" alt="">
+                    <h4>${product.name}</h4>
+                    <p>${product.description}</p>
+                </td>
+                <td>
+                    <div id="quantitySection">
+                        <p>${product.quantity}</p>
+                    </div>
+                </td>
+                <td>${product.price}</td>
+                <td id="subTotal-${product.productID}">${subTotal} DKK</td>
+            </tr>`;
+        });
+        shoppingCartTable.innerHTML += str;
+        totalElement.innerHTML = '';
+        totalElement.innerHTML = 'Total: ' + total + ' DKK';
+    }
+
+    function confirmOder() {
+    let customerID = {{ customerData.customerID }};
+    let checkoutBtn = document.getElementById('checkoutBtn');
+    let data = { "shoppingCart": JSON.parse(window.localStorage.getItem('shoppingCart')), "customerID": customerID };
+    
+    checkoutBtn.addEventListener('click', e => {
+        e.preventDefault();
+        fetch('http://localhost:5000/invoice/', {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+        }).then(function (response) {
+            window.location = "http://localhost:3000/checkout/confirmation";
+            window.localStorage.removeItem('shoppingCart');
+        })
+
+    })
+    }
+
+    document.addEventListener('DOMContentLoaded', e => {
+        showOrder();
+        confirmOder();
+    });
+</script>
+<div class="small-container">
+    <div>
+        <h3>Kundeoplysninger</h3>
+        <p>Navn: {{customerData.firstName}}</p>
+        <p>Efternavn: {{customerData.lastName}}</p>
+        <p>Email: {{customerData.email}}</p>
+        <p>Telefon nr.: {{customerData.phone}}</p>
+        <p>Adresse: {{customerData.address}}, {{customerData.zipCode}} </p>
+    </div>
+
+    <h3 style="margin-top: 20px">Ordre</h3>
+    <div class="row">
+        <table id="shoppingCartTable">
+            <tr>
+                <th>Produkt</th>
+                <th>Antal</th>
+                <th>Pris</th>
+                <th>Subtotal</th>
+            </tr>
+        </table>
+        <p id="total">Total: 0 DKK</p>
+        <a href="http://localhost:3000/checkout/" class="addToCartBtn" id="checkoutBtn">Bekræft ordre</a>
+    </div>

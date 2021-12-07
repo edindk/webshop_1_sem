@@ -2,6 +2,7 @@ var express = require('express');
 const axios = require('axios');
 const cookieParser = require('cookie-parser');
 const { create } = require('../../Backend/services/productService');
+const { route } = require('.');
 var router = express.Router();
 
 router.use(cookieParser());
@@ -10,7 +11,7 @@ router.use((req, res, next) => {
     //Get auth token from the cookies
     req.cookies['AuthToken']
     const authToken = req.cookies['AuthToken'];
-    
+
     if (req.cookies['CustomerData']) {
         const customerData = req.cookies['CustomerData'];
     }
@@ -20,7 +21,10 @@ router.use((req, res, next) => {
 });
 
 router.get('/', (req, res) => {
-    res.render('login');
+    let customerData = req.cookies['CustomerData'];
+    res.render('login', {
+        'customerData': customerData
+    });
 });
 
 
@@ -123,7 +127,7 @@ router.post('/login', async (req, res) => {
     const customer = hashedPasswordAndCustomer.customer;
     const hashedPassword = hashedPasswordAndCustomer.hashedPassword;
 
-
+    console.log(customer);
     if (customer) {
         if (customer.email === email && hashedPassword === customer.password) {
             const authToken = generateAuthToken();
@@ -138,6 +142,7 @@ router.post('/login', async (req, res) => {
                 let customerData = {
                     "customerID": customer.customerID,
                     "phone": customer.phone,
+                    "email": customer.email,
                     "address": customer.address,
                     "companyTypeID": customer.companyTypeID,
                     "countryID": customer.countryID,
@@ -163,4 +168,64 @@ router.post('/login', async (req, res) => {
 
 })
 
+router.post('/update', async (req, res) => {
+    const { email, password, confirmPassword, name, lastName, phone, country, address, zipCode, company, cvr, companyType } = req.body;
+    const authToken = req.cookies['AuthToken'];
+
+    if (password != '' && password === confirmPassword && authToken) {
+        const hashedPassword = getHashedPassword(password);
+
+        // Updates user in DB
+        axios.patch('http://localhost:5000/customer/', {
+            authToken: authToken,
+            email: email,
+            phone: phone,
+            address: address,
+            companyName: company,
+            country: country,
+            zipCode: zipCode,
+            firstName: name,
+            lastName: lastName,
+            companyType: companyType,
+            cvr: cvr,
+            password: hashedPassword.hash,
+            salt: hashedPassword.salt
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        res.clearCookie('AuthToken');
+        res.clearCookie('CustomerData');
+
+        res.render('login', {
+            message: 'Kundeoplysninger opdateret. Log ind!',
+        });
+    }
+});
+
+router.get('/logout', async (req, res) => {
+    const authToken = req.cookies['AuthToken'];
+    const customerData = req.cookies['CustomerData'];
+
+    // Clears authtokens in DB
+    axios.patch('http://localhost:5000/customer/' + customerData.customerID, {
+        authToken: authToken,
+    })
+        .then(function (response) {
+            console.log(response);
+            res.clearCookie('AuthToken');
+            res.clearCookie('CustomerData');
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+    res.clearCookie('AuthToken');
+    res.clearCookie('CustomerData');
+    res.redirect('http://localhost:3000/');
+});
 module.exports = router;
