@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const products = require('../services/productService');
-const multer = require('multer')
+const multer = require('multer');
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/images/products')
@@ -61,18 +61,21 @@ router.post('/', upload.single('imageFile'), async function (req, res, next) {
     }
 });
 
-router.put('/:id', async function (req, res, next) {
+router.post('/update/:id', upload.single('imageFile'), async function (req, res, next) {
+    let imageFile = 'http://localhost:5000/images/products/' + req.file.originalname;
     try {
-        res.json(await products.update(req.params.id, req.body));
+        await products.update(req.params.id, req.body, imageFile);
+        res.redirect('http://localhost:3000/admin');
     } catch (err) {
         console.error(`Error while updating product`, err.message);
         next(err);
     }
 });
 
-router.delete('/:id', async function (req, res, next) {
+router.post('/delete/:id', async function (req, res, next) {
     try {
-        res.json(await products.remove(req.params.id));
+        await products.remove(req.params.id);
+        res.redirect('http://localhost:3000/admin');
     } catch (err) {
         console.error(`Error in deleting product`);
         next(err);

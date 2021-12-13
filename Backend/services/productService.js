@@ -77,20 +77,21 @@ async function create(productData, imageFile) {
     return message;
 }
 
-async function update(id, updatedProduct) {
+async function update(id, updatedProduct, imageFile) {
     let message;
-
+    console.log(updatedProduct);
     await Product.findOne({
         where: { productID: id }
     })
         .then(function (product) {
-            product.productCategoryID = updatedProduct.productCategoryID;
+            product.productCategoryID = updatedProduct.productCategory;
             product.name = updatedProduct.name;
             product.description = updatedProduct.description;
-            product.partNumber = updatedProduct.partNumber;
+            product.imageFile = imageFile;
+            product.partNumber = Math.random();
             product.price = updatedProduct.price;
             product.inStock = updatedProduct.inStock;
-            product.isActive = updatedProduct.isActive;
+            product.isActive = 1;
             product.modifiedDate = new Date();
             product.save();
 

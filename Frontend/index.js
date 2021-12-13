@@ -32,6 +32,10 @@ app.use('/customerdetails', customerDetailsRouter);
 app.use('/checkout', checkoutRouter);
 app.use('/admin', adminRouter);
 
+//cors 
+const cors = require('cors');
+app.use(cors());
+
 //Loads the handlebars module
 const handlebars = require('express-handlebars');
 

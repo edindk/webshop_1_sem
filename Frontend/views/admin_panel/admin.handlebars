@@ -1,28 +1,75 @@
 <script>
-    function initAddProductModal() {
+    let productCategories;
+
+    async function initAddProductModal() {
         var modal = document.getElementById("addProductModal");
-
         var btn = document.getElementById("addProductBtn");
-
         var span = document.getElementsByClassName("close")[0];
+
+        await fetch('http://localhost:5000/productcategory')
+            .then(response => response.json())
+            .then(json => {
+                productCategories = json;
+            });
 
 
         btn.addEventListener('click', e => {
             e.preventDefault();
             modal.style.display = "block";
 
+            let str = '';
+            productCategories.forEach(productCategory => {
+                str += `<option value="${productCategory.productCategoryID}">${productCategory.categoryName}</option>`;
+            })
 
-            fetch('http://localhost:5000/productcategory')
-                .then(response => response.json())
-                .then(json => {
-                    let str = '';
-                    json.forEach(productCategory => {
-                        str += `<option value="${productCategory.productCategoryID}">${productCategory.categoryName}</option>`;
+            let productCategorySelect = document.getElementById('productCategory');
+            productCategorySelect.innerHTML = str;
+
+
+        })
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+
+    function initEditProductModal() {
+        var modal = document.getElementById("editProductModal");
+        let editBtns = document.getElementsByClassName("editProduct");
+        var span = document.getElementById('close-edit-product');
+
+        Array.from(editBtns).forEach(function (btn) {
+            btn.addEventListener("click", e => {
+                e.preventDefault();
+                modal.style.display = "block";
+
+                fetch('http://localhost:5000/products/' + btn.children[0].value)
+                    .then(response => response.json())
+                    .then(json => {
+                        let form = modal.getElementsByTagName('form');
+                        form[0].action = 'http://localhost:5000/products/update/' + btn.children[0].value
+
+                        form[0]['name'].value = json.name;
+                        form[0]['description'].value = json.description;
+                        form[0]['price'].value = json.price;
+                        form[0]['inStock'].value = json.inStock;
+
+                        let str = '';
+                        productCategories.forEach(productCategory => {
+                            str += `<option value="${productCategory.productCategoryID}">${productCategory.categoryName}</option>`;
+                        })
+
+                        let productCategorySelect = document.getElementById('productCategoryEdit');
+                        productCategorySelect.innerHTML = str;
                     })
 
-                    let productCategorySelect = document.getElementById('productCategory');
-                    productCategorySelect.innerHTML = str;
-                })
+            });
         });
 
         span.onclick = function () {
@@ -36,8 +83,87 @@
         }
     }
 
-    window.addEventListener('DOMContentLoaded', e => {
-        initAddProductModal();
+    function initDeleteProduct() {
+        let deleteBtns = document.getElementsByClassName("deleteBtn");
+
+        Array.from(deleteBtns).forEach(function (btn) {
+            btn.addEventListener("click", e => {
+                e.preventDefault();
+
+                fetch('http://localhost:5000/products/delete/' + btn.children[0].value, {
+                    method: 'POST',
+                    mode: 'no-cors'
+                })
+            })
+        })
+    }
+
+    function showProducts() {
+        let productsTable = document.getElementById('productsTable');
+
+        fetch('http://localhost:5000/products')
+            .then(response => response.json())
+            .then(json => {
+                let str = '';
+
+
+                json.forEach(product => {
+                    productCategory = productCategories.find(element => element.productCategoryID == product.productCategoryID);
+                    isActive = product.isActive ? 'Ja' : 'Nej';
+                    createDate = new Date(product.createDate);
+                    modifiedDate = new Date(product.modifiedDate);
+
+                    str += `<tr>
+                <td>    
+                    <h4>${product.name}</h4>
+                </td>
+                <td>    
+                    <p>${productCategory.categoryName}</p>
+                </td>
+                <td>    
+                    <p>${product.description}</p>
+                </td>
+                <td>    
+                    <p>${product.price} DKK</p>
+                </td>
+                <td>    
+                    <p>${product.inStock}</p>
+                </td>
+                <td>    
+                    <p>${isActive}</p>
+                </td>
+                <td>    
+                    <p>${createDate.toLocaleDateString()}</p>
+                </td>
+                <td>    
+                    <p>${modifiedDate.toLocaleDateString()}</p>
+                </td>
+            <td style="border: none;">
+                <div class="row">
+                    <div class="col" style="display: inline-flex;">
+                        <a href="" class="editProduct">
+                            <input type = "hidden" id="productID" value = "${product.productID}" />
+                            <img src="http://localhost:3000/images/edit.png" height="35px" width="35px">
+                        </a>
+                        <a href="" class="deleteBtn">
+                            <input type = "hidden" id="productID" value = "${product.productID}" />
+                            <img src="http://localhost:3000/images/delete-product.png" height="35px" width="35px" type="submit">
+                        </a>
+                    </div>
+                </div>
+            </td>
+            </tr>`;
+                });
+                productsTable.innerHTML += str;
+                initEditProductModal();
+                initDeleteProduct();
+            });
+
+    }
+
+    window.addEventListener('DOMContentLoaded', async e => {
+        await initAddProductModal();
+        showProducts();
     });
 </script>
 <div class="small-container">
@@ -56,21 +182,6 @@
                 <th>Oprettet</th>
                 <th>Redigeret</th>
             </tr>
-            <td>test test test test test </td>
-            <td>test test test test test </td>
-            <td>test test test test test </td>
-            <td>test test test test test </td>
-            <td>test</td>
-            <td>test</td>
-            <td>test</td>
-            <td>test</td>
-            <td style="border: none;">
-                <div style="width: 80px; margin-bottom: 10px;"><a href="" class="addToCartBtn"
-                        style=" background-color: orange; color: white;">Rediger</a></div>
-                <div style="width: 80px; margin-bottom: 10px;"><a href="" class="addToCartBtn"
-                        style=" background-color: orangered; color: white;">Slet</a></div>
-            </td>
-
         </table>
 
         <div id="addProductModal" class="modal">
@@ -96,6 +207,34 @@
                             style="border: none; border-radius: 0;">
                         <input style="background-color: #28a745; border-style: none; color: white;" type="submit"
                             value="Tilføj produkt">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="editProductModal" class="modal">
+
+            <div class="modal-content">
+                <span class="close" id="close-edit-product">&times;</span>
+                <div class="row">
+                    <form method="POST" action="http://localhost:5000/products/update/" enctype="multipart/form-data">
+                        <label for="name">Produkt titel:</label>
+                        <input type="text" id="name" name="name"><br>
+                        <label for="productCategory">Produktkategori:</label><br>
+                        <select name="productCategory" id="productCategoryEdit"
+                            style="width: 100%; text-align: center; border-radius: 50px;"></select><br>
+                        <label for="deschription">Beskrivelse: </label><br>
+                        <textarea id="description" name="description" rows="4" cols="50"
+                            style="resize: none; width: 100%; text-align: left;"></textarea>
+                        <label for="price">Pris: </label><br>
+                        <input type="number" id="price" name="price">
+                        <label for="inStock">Antal på lager: </label><br>
+                        <input type="number" id="inStock" name="inStock">
+                        <label for="imageFile">Produktbillede: </label>
+                        <input type="file" id="imageFile" name="imageFile" accept="image/*"
+                            style="border: none; border-radius: 0;">
+                        <input style="background-color: #28a745; border-style: none; color: white;" type="submit"
+                            value="Opdater produkt">
                     </form>
                 </div>
             </div>
