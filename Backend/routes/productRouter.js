@@ -72,10 +72,10 @@ router.post('/update/:id', upload.single('imageFile'), async function (req, res,
     }
 });
 
-router.post('/delete/:id', async function (req, res, next) {
+router.delete('/delete/:id', async function (req, res, next) {
     try {
         await products.remove(req.params.id);
-        res.redirect('http://localhost:3000/admin');
+        res.json('Product deleted');
     } catch (err) {
         console.error(`Error in deleting product`);
         next(err);

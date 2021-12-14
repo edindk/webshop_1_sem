@@ -10,14 +10,14 @@
       let str = '';
       json.forEach(product => {
         str +=
-          `<a href="http://localhost:3000/productdetails/${product.productID}">
-          <div class="col-4">
+          `<a href="http://localhost:3000/productdetails/${product.productID}"><div class="col-4">
           <img src="${product.imageFile}">
           <h4>${product.name}</h4>
-          <p>${product.price} DKK</p>
-          <a href="/" class="addToCartBtn"><img src="http://localhost:3000/images/cart.png">Tilføj</a>                        
-          </div>
-          </a>`;
+          <p hidden class="productID">${product.productID}</p>
+          <p hidden class="description">${product.description}</p>
+          <p class="price">${product.price} DKK</p>
+          <a href="" class="addToCartBtn"><img src="http://localhost:3000/images/cart.png">Tilføj</a>                        
+          </div></a>`;
       });
 
       productsByCategoryID.innerHTML = str;
@@ -27,23 +27,12 @@
     });
   }
 
-  function addEventOnAddBtn() {
-    let addToCartBtns = document.getElementsByClassName("addToCartBtn");
-
-    Array.from(addToCartBtns).forEach(function (btn) {
-      btn.addEventListener("click", e => {
-        e.preventDefault();
-        console.log('test');
-      });
-    });
-  }
-
-
   window.addEventListener('DOMContentLoaded', e => {
     showProductsByCategoryID();
   });
 
 </script>
+
 <div class="small-container">
   <h2>{{ categoryName }}</h2>
   <div class="row" id="productsByCategoryID">

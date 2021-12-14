@@ -87,14 +87,8 @@
         let deleteBtns = document.getElementsByClassName("deleteBtn");
 
         Array.from(deleteBtns).forEach(function (btn) {
-            btn.addEventListener("click", e => {
-                e.preventDefault();
+            document.getElementById("deleteBtn" + btn.children[0].value).href = 'http://localhost:3000/admin/delete/' + btn.children[0].value
 
-                fetch('http://localhost:5000/products/delete/' + btn.children[0].value, {
-                    method: 'POST',
-                    mode: 'no-cors'
-                })
-            })
         })
     }
 
@@ -145,7 +139,7 @@
                             <input type = "hidden" id="productID" value = "${product.productID}" />
                             <img src="http://localhost:3000/images/edit.png" height="35px" width="35px">
                         </a>
-                        <a href="" class="deleteBtn">
+                        <a href="" class="deleteBtn" id="deleteBtn${product.productID}">
                             <input type = "hidden" id="productID" value = "${product.productID}" />
                             <img src="http://localhost:3000/images/delete-product.png" height="35px" width="35px" type="submit">
                         </a>
@@ -162,8 +156,8 @@
     }
 
     window.addEventListener('DOMContentLoaded', async e => {
-        await initAddProductModal();
-        showProducts();
+        initAddProductModal();
+        await showProducts();
     });
 </script>
 <div class="small-container">

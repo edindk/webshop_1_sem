@@ -16,7 +16,8 @@
                                     <select id="quantity"></select>
                                     <a href="/" class="addToCartBtnProductDetails"><img src="http://localhost:3000/images/cart.png">Tilføj</a>
                                     <h3>Beskrivelse</h3>
-                                    <p>${json.description}</p>`
+                                    <p>${json.description}</p>
+                                    <p hidden class="productID">${json.productID}</p>`
 
             inStock = json.inStock;
 
@@ -25,7 +26,7 @@
         })
         .then(function () {
             let str = '';
-            for (let i = 0; i <= inStock; i++) {
+            for (let i = 1; i <= inStock; i++) {
                 str += `<option value="${i}">${i}</option>`;
             }
 
@@ -41,7 +42,19 @@
 
         addToCartBtnProductDetails[0].addEventListener("click", e => {
             e.preventDefault();
-            console.log('test');
+            quantity = document.getElementById('quantity').value
+            let productImg = document.getElementById('productImg')
+            let productDetails = document.getElementById('productDetails')
+
+            let imgFile = productImg.querySelector('img').getAttribute('src');
+            let name = productDetails.querySelector('h1').textContent;
+            let productID = productDetails.querySelector('p.productID').textContent;
+            let description = productDetails.querySelector('p').textContent;
+            let price = productDetails.querySelector('h4').textContent;
+
+            let obj = { "imgFile": imgFile, "name": name, "productID": productID, "price": price, "description": description, "quantity": quantity };
+            addToCart(obj);
+
         });
     }
 
