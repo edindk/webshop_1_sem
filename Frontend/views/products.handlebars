@@ -1,4 +1,5 @@
 <script>
+    // Method for showing all products
     function showAllProducts() {
         let products;
         products = document.getElementById('allProducts');
@@ -23,12 +24,14 @@
                 addEventOnAddBtn();
             });
     }
-
+    
+    // On DOMContentLoaded execute showAllProducts()
     window.addEventListener('DOMContentLoaded', e => {
         showAllProducts();
     });
 
 </script>
+<!--- Shows all products --->
 <div class="small-container">
     <h2>Alle produkter</h2>
     <div class="row" id="allProducts">

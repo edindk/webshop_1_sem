@@ -1,8 +1,10 @@
+// Loads essential packages
 const { application } = require('express');
 const express = require('express');
 const db = require('../config/database');
 const Product = require('../models/product');
 
+// Returns all products
 async function getMultiple() {
     let products;
 
@@ -15,6 +17,7 @@ async function getMultiple() {
     return products;
 }
 
+// Returns product by id
 async function getById(id) {
     let productToReturn;
 
@@ -29,6 +32,7 @@ async function getById(id) {
     return productToReturn;
 }
 
+// Returns the 5 recent added products
 async function getRecent() {
     let products = await getMultiple();
     let recentProducts = [];
@@ -40,6 +44,7 @@ async function getRecent() {
     return recentProducts;
 }
 
+// Returns by category id
 async function getByCategoryId(id) {
     let products;
 
@@ -54,6 +59,7 @@ async function getByCategoryId(id) {
     return products
 }
 
+// Creates product
 async function create(productData, imageFile) {
     let message;
     console.log(productData);
@@ -77,6 +83,7 @@ async function create(productData, imageFile) {
     return message;
 }
 
+// Updates product by id 
 async function update(id, updatedProduct, imageFile) {
     let message;
     console.log(updatedProduct);
@@ -102,6 +109,7 @@ async function update(id, updatedProduct, imageFile) {
     return message;
 }
 
+// Removes product by id
 async function remove(id) {
     let message;
 

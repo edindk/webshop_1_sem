@@ -1,5 +1,5 @@
 <script>
-    // Show single product
+    // Show single product by id 
     function showProductById() {
         let inStock;
         let productImg;
@@ -37,6 +37,7 @@
         });
     }
 
+    // Adds click events on all add to cart buttons 
     function addEventOnAddBtn() {
         let addToCartBtnProductDetails = document.getElementsByClassName("addToCartBtnProductDetails");
 
@@ -57,14 +58,13 @@
 
         });
     }
-
-
+    // On DOMContentLoaded execute showProductById()
     window.addEventListener('DOMContentLoaded', e => {
         showProductById();
     });
 
 </script>
-
+<!--- Product details page --->
 <div class="small-container">
     <div class="row">
         <div class="col-3" id="productImg">

@@ -27,12 +27,13 @@
     });
   }
 
+  // On DOMContentLoaded execute showProductsByCategoryID()
   window.addEventListener('DOMContentLoaded', e => {
     showProductsByCategoryID();
   });
 
 </script>
-
+<!--- Shows all products by category id--->
 <div class="small-container">
   <h2>{{ categoryName }}</h2>
   <div class="row" id="productsByCategoryID">

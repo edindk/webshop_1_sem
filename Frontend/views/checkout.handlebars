@@ -1,4 +1,5 @@
 <script>
+    // Shows order details in table
     function showOrder() {
 
         let shoppingCartTable = document.getElementById('shoppingCartTable');
@@ -38,31 +39,35 @@
         totalElement.innerHTML = 'Total: ' + total + ' DKK';
     }
 
+    // Method for creating order
     function confirmOder() {
-    let customerID = {{ customerData.customerID }};
-    let checkoutBtn = document.getElementById('checkoutBtn');
-    let data = { "shoppingCart": JSON.parse(window.localStorage.getItem('shoppingCart')), "customerID": customerID };
-    
-    checkoutBtn.addEventListener('click', e => {
-        e.preventDefault();
-        fetch('http://localhost:5000/invoice/', {
-            method: 'post',
-            body: JSON.stringify(data),
-            headers: {"Content-type": "application/json; charset=UTF-8"}
-        }).then(function (response) {
-            window.location = "http://localhost:3000/checkout/confirmation";
-            window.localStorage.removeItem('shoppingCart');
-        })
+        let customerID = {{ customerData.customerID }}
 
-    })
+        let checkoutBtn = document.getElementById('checkoutBtn');
+        let data = { "shoppingCart": JSON.parse(window.localStorage.getItem('shoppingCart')), "customerID": customerID };
+
+        checkoutBtn.addEventListener('click', e => {
+            e.preventDefault();
+            fetch('http://localhost:5000/invoice/', {
+                method: 'post',
+                body: JSON.stringify(data),
+                headers: { "Content-type": "application/json; charset=UTF-8" }
+            }).then(function (response) {
+                window.location = "http://localhost:3000/checkout/confirmation";
+                window.localStorage.removeItem('shoppingCart');
+            })
+
+        })
     }
 
+    // On DOMContentLoaded execute methods 
     document.addEventListener('DOMContentLoaded', e => {
         showOrder();
         confirmOder();
     });
 </script>
 <div class="small-container">
+    <!--- Customer information --->
     <div>
         <h3>Kundeoplysninger</h3>
         <p>Navn: {{customerData.firstName}}</p>
@@ -73,6 +78,7 @@
     </div>
 
     <h3 style="margin-top: 20px">Ordre</h3>
+    <!--- Order --->
     <div class="row">
         <table id="shoppingCartTable">
             <tr>

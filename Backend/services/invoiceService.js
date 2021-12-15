@@ -1,8 +1,10 @@
+// Loads essential packages
 const express = require('express');
 const db = require('../config/database');
 const Invoice = require('../models/invoice');
 const InvoiceLine = require('../models/invoiceLine');
 
+// Creates invoice 
 async function createInvoice(data) {
     let invoiceID;
     let shoppingCart = data['shoppingCart'];

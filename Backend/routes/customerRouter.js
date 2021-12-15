@@ -1,7 +1,9 @@
+// Loads essential packages
 const express = require('express');
 const router = express.Router();
 const customer = require('../services/customerService');
 
+// Route for getting customer by email
 router.get('/:email', async function (req, res, next) {
     try {
         res.json(await customer.getByEmail(req.params.email));
@@ -11,6 +13,7 @@ router.get('/:email', async function (req, res, next) {
     }
 });
 
+// Route for creating customer  
 router.post('/', async function (req, res, next) {
     try {
         res.json(await customer.createCustomer(req.body));
@@ -20,6 +23,7 @@ router.post('/', async function (req, res, next) {
     }
 });
 
+// Route for saving authtoken
 router.post('/authtoken', async function (req, res, next) {
     try {
         res.json(await customer.saveAuthToken(req.body));
@@ -29,6 +33,7 @@ router.post('/authtoken', async function (req, res, next) {
     }
 });
 
+// Route for updating customer by authtoken
 router.patch('/', async function (req, res, next) {
     try {
         res.json(await customer.updateByAuthToken(req.body));
@@ -38,6 +43,7 @@ router.patch('/', async function (req, res, next) {
     }
 });
 
+// Route for deleting authtokens that are associated with a customer 
 router.patch('/:id', async function (req, res, next) {
     try {
         res.json(await customer.deleteAutkTokens(req.params.id, req.body.authToken));

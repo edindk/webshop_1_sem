@@ -1,7 +1,9 @@
+// Loads essential packages
 const express = require('express');
 const db = require('../config/database');
 const Customer = require('../models/customer');
 
+// Returns customer by email
 async function getByEmail(email) {
     let customer;
 
@@ -17,6 +19,7 @@ async function getByEmail(email) {
     return customer;
 }
 
+// Creates customer
 async function createCustomer(customer) {
     const newCustomer = Customer.build({
         email: customer.email,
@@ -42,6 +45,7 @@ async function createCustomer(customer) {
     return message;
 }
 
+// Saves authtoken
 async function saveAuthToken(authTokenAndCustomerID) {
     await db.query('INSERT INTO AuthTokens (authToken, customerID) VALUES (?, ?)',
         { replacements: [authTokenAndCustomerID.authToken, authTokenAndCustomerID.customerID] }
@@ -50,6 +54,7 @@ async function saveAuthToken(authTokenAndCustomerID) {
     })
 }
 
+// Updates customer details by authtoken
 async function updateByAuthToken(updatedCustomer) {
     let customerID;
     let customerFromDB;
@@ -87,6 +92,7 @@ async function updateByAuthToken(updatedCustomer) {
     await customerFromDB.save();
 }
 
+// Deletes all authtokens
 async function deleteAutkTokens(customerID, authToken) {
     let result = await db.query('SELECT customerID FROM AuthTokens WHERE authToken=?',
         { replacements: [authToken] }

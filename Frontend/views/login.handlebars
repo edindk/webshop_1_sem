@@ -1,4 +1,5 @@
 <script>
+    // Adds click events on private customer and business customer buttons 
     function addEventListenersOnBtns(businessCustomerForm) {
         let privateCustomerBtn = document.getElementById('privateCustomerBtn');
         let businessCustomerBtn = document.getElementById('businessCustomerBtn');
@@ -29,6 +30,7 @@
         });
     }
 
+    // On DomContentLoaded execute methods 
     document.addEventListener('DOMContentLoaded', e => {
         // Default show form for private customers
         let businessCustomerForm = document.getElementById('businessCustomerForm');
